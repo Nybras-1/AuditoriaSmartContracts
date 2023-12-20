@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.13;
+
+// Código omitido por brevedad  
+
+modifier returnRewards(uint percentage) {
+// Vulnerabilidad: Llamada externa antes de actualizar estado
+    uint reward = total_invested * percentage / 10_000; 
+    (bool success, ) =  payable(msg.sender).call{value: reward}("");
+    require(success, "Reward payment failed");
+    _; 
+}
+
+function distributeBenefits(uint percentage) 
+    external  
+    returnRewards(percentage) // Llamada al modificador vulnerable
+{
+
+// Código omitido 
+
+}
